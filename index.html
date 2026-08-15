@@ -264,8 +264,8 @@ const ADMIN_WHATSAPP = '992944911113'; // пример для Таджикист
 
 // ═══════════════════════════════════════════════════════
 // ТРЕНИНГИ
-// youtubeId — ID видео с YouTube (часть ссылки после watch?v=) 
-// Например для https://youtu.be/dQw4w9WgXcQ  ->  youtubeId: 'dQw4w9WgXcQ' 
+// youtubeId — ID видео с YouTube (часть ссылки после watch?v=)
+// Например для https://youtu.be/dQw4w9WgXcQ  ->  youtubeId: 'dQw4w9WgXcQ'
 // img: своя афиша (файл рядом с index.html) или '' для эмодзи-фона
 // ═══════════════════════════════════════════════════════
 const TRAININGS = [
@@ -315,7 +315,7 @@ renderLessons();
 // ═══════════════════════════════════════════════════════
 // YOUTUBE IFRAME API
 // ═══════════════════════════════════════════════════════
-let ytPlayer=null, ytReady=false, currentTraining=null;
+let ytPlayer=null, ytReady=false, currentTraining=null, videoLoadTimeout=null;
 
 const ytTag=document.createElement('script');
 ytTag.src='https://www.youtube.com/iframe_api';
@@ -324,18 +324,58 @@ document.head.appendChild(ytTag);
 function onYouTubeIframeAPIReady(){
   ytPlayer=new YT.Player('ytPlayer',{
     height:'100%', width:'100%',
-    playerVars:{ autoplay:1, rel:0, modestbranding:1, controls:1, playsinline:1 },
+    playerVars:{
+      autoplay:1, rel:0, modestbranding:1, controls:1, playsinline:1,
+      // origin обязателен — без него на некоторых доменах/браузерах
+      // события плеера (onReady, onStateChange) просто не доходят до
+      // страницы, хотя само видео при этом всё равно играет со звуком
+      origin: window.location.origin
+    },
     events:{
       onReady:()=>{ ytReady=true; document.getElementById('vmLoading').classList.add('hide'); },
-      onStateChange:onPlayerStateChange
+      onStateChange:onPlayerStateChange,
+      onError:onPlayerError
     }
   });
 }
 
 function onPlayerStateChange(e){
+  // Подстраховка: если по какой-то причине onReady не сработал,
+  // но видео уже реально играет (буферизуется/воспроизводится) —
+  // всё равно прячем спиннер, чтобы не висел вечно поверх картинки.
+  if(e.data===YT.PlayerState.PLAYING || e.data===YT.PlayerState.BUFFERING){
+    ytReady=true;
+    clearTimeout(videoLoadTimeout);
+    document.getElementById('vmLoading').classList.add('hide');
+  }
   if(e.data===YT.PlayerState.ENDED){
     document.getElementById('endBuyOverlay').classList.add('show');
   }
+}
+
+// Коды ошибок YouTube: 2 — неверный ID, 5 — html5-ошибка,
+// 100 — видео удалено/приватное, 101/150 — владелец запретил показ на других сайтах
+function onPlayerError(e){
+  clearTimeout(videoLoadTimeout);
+  let reason='Не удалось загрузить видео.';
+  if(e.data===2)   reason='Неверный ID видео.';
+  if(e.data===5)   reason='Ошибка плеера. Попробуйте обновить страницу.';
+  if(e.data===100) reason='Видео удалено или скрыто автором.';
+  if(e.data===101||e.data===150) reason='Владелец видео запретил показ на сторонних сайтах.';
+  showVideoError(reason);
+}
+
+function showVideoError(reason){
+  const wrap=document.getElementById('vmLoading');
+  wrap.classList.remove('hide');
+  const link=currentTraining&&currentTraining.youtubeId
+    ?`https://www.youtube.com/watch?v=${currentTraining.youtubeId}` : '#';
+  wrap.innerHTML =
+    '<div style="text-align:center;color:#fff;padding:2rem;max-width:360px;">'+
+    '<div style="font-size:2.5rem;margin-bottom:.8rem;">⚠️</div>'+
+    '<div style="font-weight:700;margin-bottom:.4rem;">Видео не загрузилось</div>'+
+    '<div style="opacity:.6;font-size:.85rem;margin-bottom:1.2rem;">'+reason+'</div>'+
+    '<a href="'+link+'" target="_blank" rel="noopener" style="display:inline-block;background:var(--gold);color:#fff;padding:.7rem 1.4rem;border-radius:10px;text-decoration:none;font-weight:700;font-size:.9rem;">Открыть на YouTube</a></div>';
 }
 
 function openVideoModal(trainingId){
@@ -350,6 +390,7 @@ function openVideoModal(trainingId){
 
   document.getElementById('videoModal').classList.add('open');
   document.body.style.overflow='hidden';
+  clearTimeout(videoLoadTimeout);
 
   if(!t.youtubeId){
     // Видео ещё не добавлено — показываем сообщение вместо плеера
@@ -361,12 +402,24 @@ function openVideoModal(trainingId){
     return;
   }
 
+  // На всякий случай прячем спиннер через 4 сек в любом случае —
+  // если видео реально играет (даже без событий от API), зритель
+  // не должен видеть чёрный экран поверх работающего плеера.
+  setTimeout(()=>{ document.getElementById('vmLoading').classList.add('hide'); },4000);
+
+  // Если за 12 секунд видео так и не готово и не играет — показываем подсказку
+  videoLoadTimeout=setTimeout(()=>{
+    if(!ytReady) showVideoError('YouTube-плеер не отвечает. Проверьте интернет или отключите блокировщик рекламы.');
+  },12000);
+
   if(ytReady && ytPlayer && ytPlayer.loadVideoById){
+    clearTimeout(videoLoadTimeout);
     ytPlayer.loadVideoById(t.youtubeId);
   } else {
     const waitForYT=setInterval(()=>{
       if(ytReady && ytPlayer && ytPlayer.loadVideoById){
         clearInterval(waitForYT);
+        clearTimeout(videoLoadTimeout);
         ytPlayer.loadVideoById(t.youtubeId);
       }
     },200);
