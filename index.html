@@ -1,37 +1,445 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>КЕЙС КНИГ САИДМУРОД ДАВЛАТОВ</title>
-    <link rel="stylesheet" href="./style/style.css">
-    <script src="./js/index.js" type="module" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Саидмурод Давлатов — Онлайн Тренинги</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.youtube.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:#B8860B; --gold-l:#DAA520; --gold-bg:#FFF8E7;
+    --primary:#1A1A2E; --bg:#F5F7FA; --card:#fff;
+    --text:#1A1A2E; --muted:#6B7280; --border:#E5E7EB;
+    --green:#25D366; --green-d:#1DA851; --green-bg:#ECFDF5;
+    --sh:0 2px 16px rgba(0,0,0,.08); --sh-h:0 8px 32px rgba(0,0,0,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+  header{background:#fff;border-bottom:1px solid var(--border);box-shadow:0 1px 8px rgba(0,0,0,.06);
+    padding:0 2rem;height:70px;position:sticky;top:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--primary);}
+  .logo span{color:var(--gold);}
+  .header-cta{padding:.55rem 1.3rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.85rem;
+    font-weight:800;cursor:pointer;border:none;background:var(--gold);color:#fff;
+    box-shadow:0 2px 8px rgba(184,134,11,.3);transition:all .2s;text-decoration:none;display:none;}
+  .header-cta:hover{background:var(--gold-l);transform:translateY(-1px);}
+  @media(min-width:560px){.header-cta{display:inline-block;}}
+
+  /* ═══ HERO ═══ */
+  .hero{text-align:center;padding:5rem 2rem 3.5rem;
+    background:linear-gradient(160deg,#FFFBF0 0%,#F5F7FA 60%);
+    border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);
+    width:600px;height:600px;border-radius:50%;
+    background:radial-gradient(circle,rgba(218,165,32,.12) 0%,transparent 70%);pointer-events:none;}
+  .float-icon{position:absolute;font-size:1.8rem;opacity:.35;animation:float 6s ease-in-out infinite;pointer-events:none;filter:grayscale(.1);}
+  .float-icon.i1{top:18%;left:8%;animation-delay:0s;}
+  .float-icon.i2{top:65%;left:13%;animation-delay:1.2s;font-size:1.4rem;}
+  .float-icon.i3{top:22%;right:9%;animation-delay:.6s;}
+  .float-icon.i4{top:60%;right:14%;animation-delay:1.8s;font-size:1.5rem;}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-18px) rotate(6deg);}}
+  .hero-badge{display:inline-block;background:var(--gold-bg);border:1.5px solid rgba(184,134,11,.3);
+    color:var(--gold);font-size:.78rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+    padding:.4rem 1rem;border-radius:20px;margin-bottom:1.5rem;position:relative;z-index:1;}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:900;
+    line-height:1.15;margin-bottom:1rem;color:var(--primary);position:relative;z-index:1;}
+  .hero h1 em{font-style:normal;color:var(--gold);}
+  .hero p{color:var(--muted);font-size:1.05rem;max-width:560px;margin:0 auto 0;line-height:1.7;position:relative;z-index:1;}
+
+  .lessons-section{padding:3rem 2rem 5rem;max-width:1200px;margin:0 auto;}
+  .sec-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;
+    text-align:center;margin-bottom:.4rem;color:var(--primary);}
+  .sec-sub{text-align:center;color:var(--muted);margin-bottom:2.5rem;font-size:.95rem;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;
+    transition:transform .25s,box-shadow .25s,border-color .25s;
+    position:relative;box-shadow:var(--sh);}
+  .card:hover{transform:translateY(-5px);box-shadow:var(--sh-h);border-color:rgba(184,134,11,.3);}
+
+  .thumb{width:100%;height:175px;display:flex;align-items:center;justify-content:center;
+    font-size:3.2rem;background:linear-gradient(135deg,#FFF8E7,#FDEFC3);
+    position:relative;overflow:hidden;cursor:pointer;}
+  .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .thumb-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15) 0%,rgba(0,0,0,.35) 100%);}
+  .thumb-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;}
+  .thumb-play-btn{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.9);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,0,0,.3);
+    transition:transform .2s;}
+  .thumb:hover .thumb-play-btn{transform:scale(1.1);}
+  .thumb-play-btn svg{width:20px;height:20px;margin-left:3px;}
+
+  .badge{position:absolute;top:12px;font-size:.72rem;font-weight:800;border-radius:8px;padding:4px 10px;z-index:2;}
+  .b-num{left:12px;background:var(--gold);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  .b-free{right:12px;background:rgba(255,255,255,.95);border:1px solid var(--border);
+    color:var(--green-d);backdrop-filter:blur(4px);font-weight:800;}
+
+  .card-body{padding:1.2rem 1.3rem 1.4rem;}
+  .card-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;
+    margin-bottom:.4rem;line-height:1.3;color:var(--primary);}
+  .card-desc{color:var(--muted);font-size:.83rem;line-height:1.5;margin-bottom:1rem;}
+
+  .btn-row{display:flex;gap:.6rem;}
+  .card-btn{flex:1;padding:.7rem .5rem;border-radius:10px;font-family:'Nunito',sans-serif;
+    font-size:.82rem;font-weight:800;cursor:pointer;border:none;transition:all .2s;
+    display:flex;align-items:center;justify-content:center;gap:.4rem;}
+  .cb-play{background:var(--gold);color:#fff;box-shadow:0 2px 8px rgba(184,134,11,.3);}
+  .cb-play:hover{background:var(--gold-l);transform:translateY(-1px);}
+  .cb-buy{background:var(--green-bg);color:var(--green-d);border:1.5px solid rgba(37,211,102,.35);}
+  .cb-buy:hover{background:#D9F9E5;}
+
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;
+    color:var(--muted);font-size:.85rem;background:#fff;}
+
+  @media(max-width:600px){
+    .hero{padding:3rem 1rem 2.2rem;}
+    .lessons-section{padding:2rem 1rem 4rem;}
+    header{padding:0 1rem;}
+    .btn-row{flex-direction:column;}
+  }
+
+  /* ═══════════════════════════════════════
+     ВИДЕО МОДАЛКА (fullscreen)
+  ═══════════════════════════════════════ */
+  #videoModal{display:none;position:fixed;inset:0;width:100%;height:100%;height:100dvh;
+    z-index:9999;background:#000;flex-direction:column;align-items:stretch;}
+  #videoModal.open{display:flex;}
+  #videoModal .vm-top{display:flex;align-items:center;justify-content:space-between;
+    padding:.7rem 1rem;padding-top:calc(.7rem + env(safe-area-inset-top,20px));
+    background:rgba(0,0,0,.9);z-index:10;flex-shrink:0;min-height:52px;}
+  #videoModal .vm-title{color:#fff;font-size:.88rem;font-weight:700;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis;max-width:75%;}
+  #videoModal .vm-close-btn{background:rgba(255,255,255,.2);border:none;color:#fff;
+    width:40px;height:40px;border-radius:50%;font-size:1.1rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s;}
+  #videoModal .vm-close-btn:hover{background:rgba(255,255,255,.35);}
+  #videoModal .vm-frame-wrap{flex:1;position:relative;display:flex;align-items:center;
+    justify-content:center;background:#000;overflow:hidden;padding-bottom:env(safe-area-inset-bottom,0px);min-height:200px;}
+  #ytPlayer{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+
+  #vmLoading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:#000;z-index:5;transition:opacity .3s;}
+  #vmLoading.hide{opacity:0;pointer-events:none;}
+  .big-spinner{width:44px;height:44px;border-radius:50%;border:3px solid rgba(184,134,11,.25);
+    border-top-color:var(--gold);animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* Кнопка "Купить тренинг", которая всплывает по окончании видео */
+  #endBuyOverlay{position:absolute;inset:0;z-index:8;display:none;align-items:center;justify-content:center;
+    background:rgba(10,10,20,.82);backdrop-filter:blur(3px);flex-direction:column;gap:1.2rem;
+    text-align:center;padding:2rem;animation:fadeIn .35s ease;}
+  #endBuyOverlay.show{display:flex;}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .end-icon{font-size:2.6rem;animation:pulseIcon 1.6s ease-in-out infinite;}
+  @keyframes pulseIcon{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+  #endBuyOverlay h3{color:#fff;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;max-width:420px;}
+  #endBuyOverlay p{color:rgba(255,255,255,.7);font-size:.9rem;max-width:400px;line-height:1.6;}
+  .buy-pulse-btn{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;border:none;
+    border-radius:14px;padding:1rem 2.2rem;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:800;
+    cursor:pointer;display:flex;align-items:center;gap:.6rem;box-shadow:0 6px 24px rgba(37,211,102,.5);
+    animation:pulseBtn 1.8s ease-in-out infinite;transition:transform .2s;}
+  .buy-pulse-btn:hover{transform:translateY(-2px) scale(1.03);}
+  @keyframes pulseBtn{0%,100%{box-shadow:0 6px 24px rgba(37,211,102,.5);}50%{box-shadow:0 6px 32px rgba(37,211,102,.85);}}
+  .replay-link{color:rgba(255,255,255,.55);font-size:.82rem;text-decoration:underline;cursor:pointer;background:none;border:none;font-family:'Nunito',sans-serif;}
+  .replay-link:hover{color:#fff;}
+
+  /* ═══════════════════════════════════════
+     МОДАЛКА ПОКУПКИ (форма)
+  ═══════════════════════════════════════ */
+  .overlay{position:fixed;inset:0;background:rgba(17,24,39,.6);backdrop-filter:blur(4px);
+    z-index:10000;display:none;align-items:center;justify-content:center;padding:1rem;}
+  .overlay.show{display:flex;}
+  .modal{background:#fff;border:1px solid var(--border);border-radius:24px;padding:2.4rem;
+    max-width:430px;width:100%;text-align:center;position:relative;
+    box-shadow:0 20px 60px rgba(0,0,0,.2);animation:pop .18s ease;}
+  @keyframes pop{from{transform:scale(.93);opacity:0}to{transform:scale(1);opacity:1}}
+  .mclose{position:absolute;top:1rem;right:1rem;background:#F3F4F6;border:none;
+    color:var(--muted);font-size:1rem;cursor:pointer;width:30px;height:30px;
+    border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .mclose:hover{background:#E5E7EB;color:var(--text);}
+  .micon{font-size:2.6rem;margin-bottom:.8rem;animation:pulseIcon 2s ease-in-out infinite;}
+  .modal h2{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:.5rem;color:var(--primary);}
+  .msub{color:var(--muted);font-size:.87rem;line-height:1.6;margin-bottom:1.3rem;}
+  .field{margin-bottom:1rem;text-align:left;}
+  .field label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);
+    margin-bottom:.4rem;letter-spacing:.5px;text-transform:uppercase;}
+  .field input{width:100%;background:#F9FAFB;border:1.5px solid var(--border);border-radius:10px;
+    padding:.75rem 1rem;font-family:'Nunito',sans-serif;font-size:.95rem;
+    color:var(--text);outline:none;transition:border-color .2s;}
+  .field input:focus{border-color:var(--gold);background:#fff;}
+  .field input[readonly]{background:var(--gold-bg);color:var(--gold);font-weight:700;cursor:default;}
+  #buyErr{background:#FEF2F2;border:1.5px solid #FECACA;border-radius:8px;
+    padding:.6rem .9rem;font-size:.84rem;color:#DC2626;margin-bottom:1rem;display:none;text-align:left;}
+  .sbtn-wa{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;border:none;
+    border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+    cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(37,211,102,.4);
+    display:flex;align-items:center;justify-content:center;gap:.6rem;}
+  .sbtn-wa:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,211,102,.55);}
+  .wa-icon-anim{animation:pulseIcon 1.5s ease-in-out infinite;}
+</style>
 </head>
-<body style="background-color:aliceblue;">
+<body>
 
-    <div class="wrapper">
-        <h1 style="font-size: 25px;" >СПИСОК КНИГ</h1>
-        <div class="cards"></div>
-        <button class="show-cards none">Показать еще</button>
-        
-        <a href="/basket.html" class="basket">
-            <div class="basket__inner">
-                <svg width="38" height="38" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M.75-.02a.75.75 0 100 1.5l.408-.006 1.606 1.281 1.839 6.881L4.237 12a2 2 0 102.188 2.722l5.705.028a2 2 0 100-1.5l-5.705-.028a2.007 2.007 0 00-.722-.898l.438-2.632 7.933.027 1.91-7.715H4.227L1.683-.026 1.68-.02v-.005L.75-.02z" fill="#000"></path>
-                </svg>
-                <span class="basket__count">0</span>
-            </div>
-        </a>
-        <a class="home" href="/">
-            <svg width="45" height="45" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.98 1.984l7 6h-2.003v6H9.96V10.97H5.997v3.016H2.982v-6H.979l7-6z" fill="#000"></path>
-            </svg>
-        </a>
+<header>
+  <div class="logo">Давлатов <span>Академия</span></div>
+  <a href="#lessons" class="header-cta">🎓 Смотреть тренинги</a>
+</header>
+
+<div class="hero">
+  <span class="float-icon i1">💰</span>
+  <span class="float-icon i2">📈</span>
+  <span class="float-icon i3">🎯</span>
+  <span class="float-icon i4">🏆</span>
+  <div class="hero-badge">🎓 Образовательная платформа</div>
+  <h1>Онлайн Школа <em>Саидмурода</em><br>Давлатова</h1>
+</div>
+
+<div class="lessons-section" id="lessons">
+  <h2 class="sec-title">Программа обучения</h2>
+  <div class="grid" id="lessonsGrid"></div>
+</div>
+
+<footer>© 2026 Давлатов Академия · Все права защищены</footer>
+
+<!-- ═══ FULLSCREEN ВИДЕО МОДАЛКА ═══ -->
+<div id="videoModal">
+  <div class="vm-top">
+    <span class="vm-title" id="vmTitle"></span>
+    <button class="vm-close-btn" onclick="closeVideoModal()">✕</button>
+  </div>
+  <div class="vm-frame-wrap">
+    <div id="vmLoading"><div class="big-spinner"></div></div>
+    <div id="ytPlayer"></div>
+
+    <!-- Кнопка "Купить тренинг", появляется автоматически по окончании видео -->
+    <div id="endBuyOverlay">
+      <div class="end-icon">🎉</div>
+      <h3 id="endBuyTitle">Вам понравился этот тренинг?</h3>
+      <p>Заберите полную версию с практическими материалами — оставьте заявку, и мы свяжемся с вами в WhatsApp.</p>
+      <button class="buy-pulse-btn" onclick="openBuyModalFromPlayer()">
+        <span class="wa-icon-anim">🛒</span> Купить Тренинг
+      </button>
+      <button class="replay-link" onclick="replayVideo()">↻ Посмотреть ещё раз</button>
     </div>
+  </div>
+</div>
 
-    <footer style="font-family: Arial, Helvetica, sans-serif; text-align: center; padding: 10px 0;">
-        SamoBooks © 2024. Все права защищены. ИП Аминов С.
-    </footer>
+<!-- ═══ МОДАЛКА ПОКУПКИ ═══ -->
+<div class="overlay" id="buyModal">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal('buyModal')">✕</button>
+    <div class="micon">🛒</div>
+    <h2>Купить тренинг</h2>
+    <p class="msub">Оставьте ваше ФИО — мы откроем полный доступ к тренингу и свяжемся с вами в WhatsApp.</p>
+    <div id="buyErr"></div>
+    <form id="buyForm" onsubmit="submitBuyForm(event)">
+      <div class="field">
+        <label>Тренинг</label>
+        <input type="text" id="buyTraining" readonly>
+      </div>
+      <div class="field">
+        <label>Ваше Ф.И.О.</label>
+        <input type="text" id="buyName" placeholder="Например: Иванов Иван Иванович" autocomplete="name" required>
+      </div>
+      <button type="submit" class="sbtn-wa">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white" class="wa-icon-anim"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Отправить в WhatsApp
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// ⚠️ НАСТРОЙКИ — ЗАМЕНИТЕ ПЕРЕД ПУБЛИКАЦИЕЙ
+// ═══════════════════════════════════════════════════════
+
+// Номер администратора WhatsApp: только цифры, с кодом страны (без + и пробелов)
+const ADMIN_WHATSAPP = '992944911113'; // пример для Таджикистана: 992XXXXXXXXX
+
+// ═══════════════════════════════════════════════════════
+// ТРЕНИНГИ
+// youtubeId — ID видео с YouTube (часть ссылки после watch?v=)
+// Например для https://youtu.be/dQw4w9WgXcQ  ->  youtubeId: 'dQw4w9WgXcQ'
+// img: своя афиша (файл рядом с index.html) или '' для эмодзи-фона
+// ═══════════════════════════════════════════════════════
+const TRAININGS = [
+  {id:1, title:'Лифт: Ведущий от должника к миллионеру', desc:'У каждого есть шанс стать миллионером, выбраться из долгов!', emoji:'🧠', img:'9999.png', 3dNH5K33oHk:''},
+  {id:2, title:'Роҳҳои сохтани бизнес ва ташкил кардани ҷои корӣ', desc:'Система целеполагания, которая работает. Практические инструменты.', emoji:'🎯', img:'8888.png', youtubeId:''},
+  {id:3, title:'Роҳҳои пасандоз кардан ва зиёд кардани пул', desc:'Сохранение и приумножение денег.', emoji:'⏰', img:'3.png', youtubeId:''},
+  {id:4, title:'Организация источников дохода', desc:'Основы личных финансов. Активы и пассивы. Денежный поток.', emoji:'💰', img:'4.png', youtubeId:''},
+  {id:5, title:'Живые деньги', desc:'Живые деньги: как заставить капитал работать на вас.', emoji:'🤝', img:'5.png', youtubeId:''},
+  {id:6, title:'Лидерство', desc:'Управление персоналом.', emoji:'📢', img:'6.png', youtubeId:''},
+  {id:7, title:'Лидерство и управление командой', desc:'15 заповедей руководителя.', emoji:'👑', img:'7.png', youtubeId:''},
+  {id:8, title:'Масштабирование бизнеса', desc:'Продажи, увеличение прибыли вашего бизнеса.', emoji:'🚀', img:'8.png', youtubeId:''},
+  {id:9, title:'Недвижимость без стартового капитала', desc:'Как приобрести недвижимость при любом доходе.', emoji:'🏠', img:'9.png', youtubeId:''},
+];
+
+// ═══════════════════════════════════════════════════════
+// РЕНДЕР КАРТОЧЕК
+// ═══════════════════════════════════════════════════════
+function renderLessons(){
+  const grid=document.getElementById('lessonsGrid');
+  grid.innerHTML='';
+  TRAININGS.forEach(t=>{
+    const thumb=t.img
+      ?`<img src="${t.img}" alt="" loading="lazy" decoding="async">`
+      :`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${t.emoji}</div>`;
+    const card=document.createElement('div');
+    card.className='card';
+    card.innerHTML=`
+      <div class="thumb" onclick="openVideoModal(${t.id})">
+        ${thumb}
+        <div class="thumb-overlay"></div>
+        <div class="thumb-play"><div class="thumb-play-btn"><svg viewBox="0 0 24 24" fill="#B8860B"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div>
+      </div>
+      <div class="badge b-num">Урок ${t.id}</div>
+      <div class="card-body">
+        <div class="card-title">${t.title}</div>
+        <div class="card-desc">${t.desc}</div>
+        <div class="btn-row">
+          <button class="card-btn cb-play" onclick="openVideoModal(${t.id})">▶ Открыть Урок</button>
+          <button class="card-btn cb-buy" onclick="openBuyModal(${t.id})">🛒 Купить</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+renderLessons();
+
+// ═══════════════════════════════════════════════════════
+// YOUTUBE IFRAME API
+// ═══════════════════════════════════════════════════════
+let ytPlayer=null, ytReady=false, currentTraining=null;
+
+const ytTag=document.createElement('script');
+ytTag.src='https://www.youtube.com/iframe_api';
+document.head.appendChild(ytTag);
+
+function onYouTubeIframeAPIReady(){
+  ytPlayer=new YT.Player('ytPlayer',{
+    height:'100%', width:'100%',
+    playerVars:{ autoplay:1, rel:0, modestbranding:1, controls:1, playsinline:1 },
+    events:{
+      onReady:()=>{ ytReady=true; document.getElementById('vmLoading').classList.add('hide'); },
+      onStateChange:onPlayerStateChange
+    }
+  });
+}
+
+function onPlayerStateChange(e){
+  if(e.data===YT.PlayerState.ENDED){
+    document.getElementById('endBuyOverlay').classList.add('show');
+  }
+}
+
+function openVideoModal(trainingId){
+  const t=TRAININGS.find(x=>x.id===trainingId);
+  if(!t) return;
+  currentTraining=t;
+
+  document.getElementById('vmTitle').textContent=t.title;
+  document.getElementById('endBuyTitle').textContent=`Вам понравился «${t.title}»?`;
+  document.getElementById('endBuyOverlay').classList.remove('show');
+  document.getElementById('vmLoading').classList.remove('hide');
+
+  document.getElementById('videoModal').classList.add('open');
+  document.body.style.overflow='hidden';
+
+  if(!t.youtubeId){
+    // Видео ещё не добавлено — показываем сообщение вместо плеера
+    document.getElementById('vmLoading').innerHTML =
+      '<div style="text-align:center;color:#fff;padding:2rem;">'+
+      '<div style="font-size:2.5rem;margin-bottom:.8rem;">🎬</div>'+
+      '<div style="font-weight:700;margin-bottom:.4rem;">Видео скоро появится</div>'+
+      '<div style="opacity:.6;font-size:.85rem;">Добавьте youtubeId для этого тренинга в коде сайта</div></div>';
+    return;
+  }
+
+  if(ytReady && ytPlayer && ytPlayer.loadVideoById){
+    ytPlayer.loadVideoById(t.youtubeId);
+  } else {
+    const waitForYT=setInterval(()=>{
+      if(ytReady && ytPlayer && ytPlayer.loadVideoById){
+        clearInterval(waitForYT);
+        ytPlayer.loadVideoById(t.youtubeId);
+      }
+    },200);
+  }
+}
+
+function replayVideo(){
+  document.getElementById('endBuyOverlay').classList.remove('show');
+  if(ytPlayer && ytPlayer.seekTo){ ytPlayer.seekTo(0); ytPlayer.playVideo(); }
+}
+
+function closeVideoModal(){
+  document.getElementById('videoModal').classList.remove('open');
+  document.body.style.overflow='';
+  document.getElementById('endBuyOverlay').classList.remove('show');
+  if(ytPlayer && ytPlayer.stopVideo){ try{ ytPlayer.stopVideo(); }catch(e){} }
+}
+
+// ═══════════════════════════════════════════════════════
+// МОДАЛКА ПОКУПКИ / ЗАЯВКИ
+// ═══════════════════════════════════════════════════════
+function openBuyModal(trainingId){
+  const t=TRAININGS.find(x=>x.id===trainingId);
+  if(!t) return;
+  currentTraining=t;
+  document.getElementById('buyTraining').value=t.title;
+  document.getElementById('buyName').value='';
+  hideBuyErr();
+  openModal('buyModal');
+}
+
+// Открыть форму покупки прямо из плеера (после окончания видео)
+function openBuyModalFromPlayer(){
+  if(!currentTraining) return;
+  closeVideoModal();
+  openBuyModal(currentTraining.id);
+}
+
+function submitBuyForm(e){
+  e.preventDefault();
+  const name=document.getElementById('buyName').value.trim();
+  const trainingTitle=document.getElementById('buyTraining').value;
+
+  if(!name){
+    showBuyErr('Пожалуйста, укажите ваше ФИО.');
+    return;
+  }
+
+  const msg=encodeURIComponent(
+    `Здравствуйте! Хочу купить тренинг.\n\n`+
+    `📚 Тренинг: ${trainingTitle}\n`+
+    `👤 Ф.И.О.: ${name}`
+  );
+
+  window.location.href=`https://wa.me/${ADMIN_WHATSAPP}?text=${msg}`;
+}
+
+function showBuyErr(m){ const e=document.getElementById('buyErr'); e.textContent='⚠ '+m; e.style.display='block'; }
+function hideBuyErr(){ document.getElementById('buyErr').style.display='none'; }
+
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.overlay').forEach(el=>{
+  el.addEventListener('click',e=>{ if(e.target!==el) return; el.classList.remove('show'); });
+});
+
+// Закрытие видео по Esc
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(document.getElementById('videoModal').classList.contains('open')) closeVideoModal();
+    document.querySelectorAll('.overlay.show').forEach(el=>el.classList.remove('show'));
+  }
+});
+</script>
 </body>
 </html>
