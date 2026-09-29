@@ -24,11 +24,27 @@
     display:flex;align-items:center;justify-content:space-between;}
   .logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--primary);}
   .logo span{color:var(--gold);}
-  .header-cta{padding:.55rem 1.3rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.85rem;
+  .header-cta{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;flex-shrink:0;white-space:nowrap;
+    padding:.6rem 1.5rem;min-height:44px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;
     font-weight:800;cursor:pointer;border:none;background:var(--gold);color:#fff;
-    box-shadow:0 2px 8px rgba(184,134,11,.3);transition:all .2s;text-decoration:none;display:none;}
+    box-shadow:0 2px 8px rgba(184,134,11,.3);transition:all .2s;text-decoration:none;
+    -webkit-tap-highlight-color:transparent;}
   .header-cta:hover{background:var(--gold-l);transform:translateY(-1px);}
-  @media(min-width:560px){.header-cta{display:inline-block;}}
+  .header-cta:active{transform:translateY(0) scale(.97);}
+  .header-cta:focus-visible{outline:3px solid rgba(184,134,11,.45);outline-offset:2px;}
+  .logo{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  header{gap:.75rem;}
+  @media(max-width:600px){
+    header{height:60px;}
+    .logo{font-size:1.05rem;}
+    .header-cta{padding:.5rem 1.1rem;font-size:.85rem;}
+  }
+  @media(max-width:360px){
+    header{padding:0 .75rem;}
+    .logo{font-size:.95rem;}
+    .header-cta{padding:.5rem .9rem;font-size:.8rem;}
+  }
+  @media(min-width:1200px){header{padding:0 max(2rem,calc((100vw - 1200px)/2));}}
 
   /* ═══ HERO ═══ */
   .hero{text-align:center;padding:5rem 2rem 3.5rem;
@@ -187,7 +203,7 @@
 
 <header>
   <div class="logo">Давлатов <span>Академия</span></div>
-  <a href="#lessons" class="header-cta">🎓 Смотреть тренинги</a>
+  <a href="https://onlineshvcool.netlify.app/" class="header-cta" aria-label="Вход на главный сайт">Вход</a>
 </header>
 
 <div class="hero">
