@@ -137,7 +137,24 @@
   #videoModal .vm-close-btn:hover{background:rgba(255,255,255,.35);}
   #videoModal .vm-frame-wrap{flex:1;position:relative;display:flex;align-items:center;
     justify-content:center;background:#000;overflow:hidden;padding-bottom:env(safe-area-inset-bottom,0px);min-height:200px;}
-  #ytPlayer{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+  /* Плеер занимает всё место над панелью управления */
+  .yt-box{position:absolute;top:0;left:0;right:0;bottom:56px;overflow:hidden;background:#000;}
+  /* --yt-crop: на сколько % обрезать видео сверху и снизу, чтобы спрятать плашки YouTube (0 = не обрезать) */
+  #ytPlayer{position:absolute;left:0;border:none;width:100%;
+    --yt-crop:0%;top:calc(var(--yt-crop) * -1);height:calc(100% + var(--yt-crop) * 2);}
+  /* Прозрачный щит поверх ролика: клики не доходят до YouTube, его кнопки и плашки не появляются */
+  #ytShield{position:absolute;inset:0;z-index:3;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    -webkit-tap-highlight-color:transparent;}
+  #ytShield .big-play{display:none;width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.18);
+    color:#fff;font-size:2rem;align-items:center;justify-content:center;padding-left:6px;}
+  /* На паузе и в конце щит становится чёрным — плашки YouTube (канал, «Ещё видео», логотип) не видны */
+  #ytShield.covered{background:#000;}
+  #ytShield.covered .big-play{display:flex;}
+  .yt-controls{position:absolute;left:0;right:0;bottom:0;height:56px;z-index:6;background:#000;
+    display:flex;align-items:center;gap:.7rem;padding:0 1rem;padding-bottom:env(safe-area-inset-bottom,0px);color:#fff;font-size:.8rem;}
+  .yt-controls button{background:none;border:none;color:#fff;font-size:1.3rem;cursor:pointer;width:34px;height:34px;padding:0;}
+  .yt-controls input[type=range]{flex:1;accent-color:var(--gold,#b8860b);height:4px;}
+  .yt-controls .yt-time{white-space:nowrap;font-variant-numeric:tabular-nums;opacity:.85;}
 
   #vmLoading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     background:#000;z-index:5;transition:opacity .3s;}
@@ -231,7 +248,17 @@
   </div>
   <div class="vm-frame-wrap">
     <div id="vmLoading"><div class="big-spinner"></div></div>
-    <div id="ytPlayer"></div>
+    <div class="yt-box">
+      <div id="ytPlayer"></div>
+      <div id="ytShield" onclick="togglePlay()"><div class="big-play">▶</div></div>
+    </div>
+    <div class="yt-controls">
+      <button id="ytPlayBtn" onclick="togglePlay()" aria-label="Пауза/Плей">⏸</button>
+      <span class="yt-time" id="ytCur">0:00</span>
+      <input type="range" id="ytSeek" min="0" max="1000" value="0" aria-label="Перемотка">
+      <span class="yt-time" id="ytDur">0:00</span>
+      <button id="ytMuteBtn" onclick="toggleMute()" aria-label="Звук">🔊</button>
+    </div>
 
     <!-- Кнопка "Купить тренинг", появляется автоматически по окончании видео -->
     <div id="endBuyOverlay">
@@ -342,11 +369,12 @@ function onYouTubeIframeAPIReady(){
   ytPlayer=new YT.Player('ytPlayer',{
     height:'100%', width:'100%',
     playerVars:{
-      autoplay:1, rel:0, modestbranding:1, controls:1, playsinline:1,
+      autoplay:1, rel:0, modestbranding:1, controls:0, playsinline:1,
+      disablekb:1, fs:0, iv_load_policy:3, cc_load_policy:0,
       // origin обязателен — без него на некоторых доменах/браузерах
       // события плеера (onReady, onStateChange) просто не доходят до
       // страницы, хотя само видео при этом всё равно играет со звуком
-      origin: window.location.origin
+      ...(location.protocol.startsWith('http') ? {origin: window.location.origin} : {})
     },
     events:{
       onReady:()=>{ ytReady=true; document.getElementById('vmLoading').classList.add('hide'); },
@@ -368,7 +396,37 @@ function onPlayerStateChange(e){
   if(e.data===YT.PlayerState.ENDED){
     document.getElementById('endBuyOverlay').classList.add('show');
   }
+  // Чёрный щит на паузе/в конце — прячет плашки YouTube
+  const covered = e.data===YT.PlayerState.PAUSED || e.data===YT.PlayerState.ENDED || e.data===YT.PlayerState.CUED;
+  document.getElementById('ytShield').classList.toggle('covered', covered);
+  document.getElementById('ytPlayBtn').textContent = (e.data===YT.PlayerState.PLAYING||e.data===YT.PlayerState.BUFFERING) ? '⏸' : '▶';
 }
+
+// ── Свои кнопки управления ──
+function fmtTime(t){ t=Math.floor(t||0); const m=Math.floor(t/60), s=t%60; return m+':'+String(s).padStart(2,'0'); }
+function togglePlay(){
+  if(!ytPlayer||!ytPlayer.getPlayerState) return;
+  ytPlayer.getPlayerState()===YT.PlayerState.PLAYING ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
+}
+function toggleMute(){
+  if(!ytPlayer||!ytPlayer.isMuted) return;
+  if(ytPlayer.isMuted()){ ytPlayer.unMute(); document.getElementById('ytMuteBtn').textContent='🔊'; }
+  else { ytPlayer.mute(); document.getElementById('ytMuteBtn').textContent='🔇'; }
+}
+let seeking=false;
+const ytSeek=document.getElementById('ytSeek');
+ytSeek.addEventListener('input',()=>{ seeking=true; });
+ytSeek.addEventListener('change',()=>{
+  if(ytPlayer&&ytPlayer.getDuration) ytPlayer.seekTo(ytPlayer.getDuration()*ytSeek.value/1000,true);
+  seeking=false;
+});
+setInterval(()=>{
+  if(!ytReady||!ytPlayer||!ytPlayer.getCurrentTime||seeking) return;
+  const d=ytPlayer.getDuration()||0, c=ytPlayer.getCurrentTime()||0;
+  document.getElementById('ytCur').textContent=fmtTime(c);
+  document.getElementById('ytDur').textContent=fmtTime(d);
+  if(d) ytSeek.value=Math.round(c/d*1000);
+},500);
 
 // Коды ошибок YouTube: 2 — неверный ID, 5 — html5-ошибка,
 // 100 — видео удалено/приватное, 101/150 — владелец запретил показ на других сайтах
